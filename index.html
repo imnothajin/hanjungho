@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>한정호 단위계 체크리스트</title>
+  <style>
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #2d3748;
+      min-height: 100vh;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.75rem;
+      margin-bottom: 2rem;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    .checklist {
+      width: 100%;
+      max-width: 800px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      padding: 2.5rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    .item {
+      margin-bottom: 2.5rem;
+      animation: fadeIn 0.5s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .question-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #2d3748;
+    }
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.75rem;
+    }
+    .option {
+      text-align: center;
+      background: white;
+      border: 2px solid #e2e8f0;
+      padding: 0.75rem;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+    .option:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+    }
+    input[type="radio"] {
+      display: none;
+    }
+    input[type="radio"]:checked + label {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-color: transparent;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+    }
+    #result {
+      text-align: center;
+      margin-top: 2.5rem;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 0.5s ease-out;
+    }
+    button {
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      background: white;
+      color: #667eea;
+      border-radius: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      background: #f8f9fa;
+    }
+    @media (max-width: 640px) {
+      body { padding: 1rem; }
+      .checklist { padding: 1.5rem; }
+      h1 { font-size: 2rem; }
+      .options { grid-template-columns: 1fr; }
+    }
+    .option {
+      flex: 1;
+      text-align: center;
+      background: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .option:hover {
+      background: #ddd;
+    }
+    input[type="radio"] {
+      display: none;
+    }
+    input[type="radio"]:checked + label {
+      background-color: #4f46e5;
+      color: white;
+      font-weight: bold;
+    }
+    #result {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      background-color: #4f46e5;
+      color: white;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    button:hover {
+      background-color: #3730a3;
+    }
+  </style>
+</head>
+<body>
+  <h1>한정호 단위계</h1>
+  <div class="checklist" id="checklist">
+    <!-- 항목이 여기에 추가됨 -->
+  </div>
+  <button onclick="calculateScore()">점수 계산</button>
+  <div id="result"></div>
+
+  <script>
+    const questions = [
+      { text: "한정호보다 지능이 높은가?", value: -1 },
+      { text: "한정호보다 유머러스한가?", value: -1 },
+      { text: "한정호보다 창의적인가?", value: -1 },
+      { text: "한정호보다 외모가 뛰어난가?", value: -1 },
+      { text: "한정호보다 말빨이 좋은가?", value: -1 },
+      { text: "한정호보다 성실한가?", value: -1 },
+      { text: "한정호보다 감정조절이 잘 되는가?", value: -1 },
+      { text: "한정호보다 다정한가?", value: -1 },
+      { text: "한정호보다 공감능력이 뛰어난가?", value: -1 },
+      { text: "한정호보다 리더십이 있는가?", value: -1 },
+      { text: "한정호보다 대인관계가 원만한가?", value: -1 },
+      { text: "한정호보다 잘생긴가?", value: -1 },
+      { text: "한정호보다 깨끗한가?", value: -1 },
+      { text: "한정호보다 게으른가?", value: 1 },
+      { text: "한정호보다 이기적인가?", value: 1 },
+      { text: "한정호보다 허세가 심한가?", value: 1 },
+    ];
+
+    const scale = [
+      { label: "매우 아니다", score: -2 },
+      { label: "아니다", score: -1 },
+      { label: "모름", score: 0 },
+      { label: "그렇다", score: 1 },
+      { label: "매우 그렇다", score: 2 },
+    ];
+
+    const checklistDiv = document.getElementById("checklist");
+
+    questions.forEach((q, i) => {
+      const div = document.createElement("div");
+      div.className = "item";
+
+      const questionHTML = `
+        <div class="question-text">${q.text}</div>
+        <div class="options">
+          ${scale.map((s, j) => `
+            <div class="option-container">
+              <input type="radio" name="q${i}" id="q${i}_opt${j}" value="${s.score}" />
+              <label for="q${i}_opt${j}" class="option">${s.label}</label>
+            </div>
+          `).join("")}
+        </div>
+      `;
+
+      div.innerHTML = questionHTML;
+      checklistDiv.appendChild(div);
+    });
+
+    function calculateScore() {
+      let total = 0;
+      questions.forEach((q, i) => {
+        const radios = document.getElementsByName(`q${i}`);
+        for (const radio of radios) {
+          if (radio.checked) {
+            total += parseInt(radio.value) * q.value;
+            break;
+          }
+        }
+      });
+      const resultText = `[ 검사 결과 ]
+(음수일수록 좋습니다.)
+
+${total} 한정호`;
+      document.getElementById("result").innerHTML = resultText.replace(/\n/g, '<br>');
+    }
+  </script>
+</body>
+</html>
